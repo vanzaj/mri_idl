@@ -1,0 +1,160 @@
+OBJECT: ph_BaseObj
+obj = { ph_BaseObj,$
+	_name    : '',   $ ; object's name
+	_debug   : 0b,   $ ; debug flag
+	_destroy : 0b,   $ ; change behavior if included into a ph_Container
+	wParent  : 0L,   $ ; parent widget ID for dialog_message (in ShowError)
+	oRef : obj_new() $ ; a reference to any object (no cleanup)
+}
+
+METHODS:
+Init             meth_F
+AutoName         meth_F
+_name            meth_F
+copy             meth_F
+GetProperty      meth_P
+SetProperty      meth_P
+ShowError        meth_P
+SelfDestroy      meth_P
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+OBJECT:
+obj = { ph_Container,          $ 
+        INHERITS IDL_CONTAINER $
+}
+
+METHODS:
+Init             meth_F 
+FindByName       meth_F
+Get              meth_F
+GetNames         meth_F 
+Remove           meth_P 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+OBJECT:
+obj = { SLICE_STACK,  $
+	INHERITS ph_BaseObj,$
+	data: ptr_new(),    $ ; 3D data array 
+	dims: intarr(3),    $ ; xyz size
+	voxel:fltarr(3),    $ ; xyz voxel size [mm]
+	imin: 0.0,          $ ; data min
+	imax: 0.0,          $ ; data max
+	range: 0.0,         $ ; (max-min)
+	palette: obj_new(), $ ; reference to palette object (no cleanup)
+	win_level: 0.0,     $ ; window level
+	win_width: 0.0,     $ ; window width
+	orient: ''          $ ; TRA/SAG/COR
+}
+
+METHODS:
+init             meth_F
+data             meth_F
+dim              meth_F
+fov              meth_F
+slice            meth_F
+value            meth_F
+voxel            meth_F
+SetProperty      meth_P
+GetProperty      meth_P
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+OBJECT:
+obj = { VOLDISP,       $
+  name    : '',        $ ; user provided object name
+  wTOP    : 0,         $
+  wDraw   : 0,         $
+  wSlide  : 0,         $
+  wCM     : 0,         $ ; context menu base
+  grWin   : obj_new(), $ ; reference to window object
+  grScene : obj_new(), $
+  grIview : obj_new(), $ ; image view
+  grImod  : obj_new(), $
+  grLview : obj_new(), $ ; annotation layer view
+  grLmod  : obj_new(), $
+  grBackIm: obj_new(), $ ; background image (indexed)
+  grBackCT: obj_new(), $ ; color table for backgr image
+  grOverIm: obj_new(), $ ; overlay image    (true color)
+  grCTbar : obj_new(), $ ; color bar object
+  statusbar: obj_new(),$ ; reference to an object acting as status bar
+  win_size: intarr(2) ,$ ; display window size (pixels)
+  interp  : 0,         $ ; interpolate flag
+  zoom    : 0.0,       $ ; current zoom
+  cur_sl  : intarr(3), $ ; current slice (index for SAG,COR,TRA)
+  ori_list: strarr(3), $ ; TRA/SAG/COR
+  ori_sel : 0L,        $ ; current orientation selection
+  stack   : obj_new(), $ ; 3D stack reference (slice_stack object)
+  overlay : obj_new(), $ ; 3D stack reference (slice_stack object)
+  roi_type: '',        $ ; current roi [dot, rect, circ, freehand]
+  click   : click,     $ ; saves last mouse btn press event
+  event   : ptr_new()  $ ; generic event holder
+}
+
+click = { VOLDISP_CLICK, $
+  press:0b, x:0L, y:0L }
+
+
+METHODS:
+init             meth_F
+error            meth_P
+info             meth_P
+name             meth_F
+_redraw          meth_P
+change_backIm    meth_P
+change_stack     meth_P
+click_coords     meth_F
+draw_main_events meth_P
+draw_roi_events  meth_P
+gui_activate     meth_P
+gui_deactivate   meth_P
+popup_events     meth_P
+redraw_zoom      meth_P
+cur_sl           meth_F
+slider_events    meth_P
+view_ori         meth_F
+setproperty      meth_P
+getref           meth_F
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+OBJECT:
+obj = {ph_IMGREG, $
+	_seed      : ptr_new()   ,$ ; private var for randomu calls
+	transform  : dblarr(4,4) ,$ ; current transformation matrix
+	stack_ref  : obj_new()   ,$ ; reference volume (no cleanup)
+	stack_tst  : obj_new()   ,$ ; test volume      (no cleanup)
+	int_max    : 0L          ,$ ; intensity max (for writing analyze files)
+	dir_air    : ''          ,$ ; path to AIR binaries
+	dir_tmp    : ''          ,$ ; directory for temp hdr/img/air files
+	dir_old    : ''          ,$ ; previous working directory
+	cmd_makehdr: ''          ,$ ; makeheader
+	cmd_align  : ''          ,$ ; alinglinear
+	cmd_reslice: ''          ,$ ; reslice
+	opt_model  : ''          ,$ ; -m  (transf model)
+	opt_costf  : ''          ,$ ; -x  (cost function)
+	opt_convth : ''          ,$ ; -c  (convergence threshold)
+	opt_t1     : ''          ,$ ; -t1 (ref img threshold)
+	opt_t2     : ''          ,$ ; -t2 (test img threshold)
+	opt_b1     : ''          ,$ ; -b1 (ref img smoothing)
+	opt_b2     : ''          ,$ ; -b2 (tst img smoothing)
+	opt_p1     : ''          ,$ ; -p1 (ref img partitions)
+	opt_p2     : ''          ,$ ; -p2 (tst img partitions)
+	opt_rmode  : ''          ,$ ; -n (reslice interpolation model)
+	file_ref   : ''          ,$ ; tmp filename for reference image
+	file_tst   : ''          ,$ ; tmp filename for test image
+	file_res   : ''          ,$ ; tmp filename for result image
+	file_air   : ''           $ ; tmp file for .air file
+}
+
+METHODS:
+init             meth_F
+SetAirParameters meth_P
+air_par_ok       meth_F
+Align            meth_P
+Reslice          meth_F
+RandomName       meth_F
+ReadResFile      meth_F
+ErrMsg           meth_P
+GetProperty      meth_P
+SetProperty      meth_P
+WriteTmpFile     meth_P
+DeleteTmpFiles   meth_P
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+

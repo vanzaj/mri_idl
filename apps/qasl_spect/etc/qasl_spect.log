@@ -1,0 +1,3 @@
+data_air = /home/ivz/prog/idl/proj/qasl_spect/bin_air
+data_tmp = /tmp
+Avalable data: ASL_CBF SPECT_CBF MR_BRAIN

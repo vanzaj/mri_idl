@@ -1,0 +1,54 @@
+==========================
+=== ASL timing project ===
+==========================
+
+Author: Ivan Zimine <ivan.zimine@philips.com>
+Last updated: 2010-03-31
+
+Site: Kyushu University
+Contact: Dr. Yoshiura
+
+*Purpose* 
+
+Traditionally, ASL has been used to measure only CBF values.  With multi-phase
+ASL, it is theoretically possible to extract temporal parameters that could
+provide information like bolus arrival time or time-to-peak as they are known
+in DSC perfusion. ASL has the advantage over DSC for being completely
+non-invasive.
+
+The main purpose of the project is extraction of such time parameters from
+ASL perfusion time curves and evaluation of potential diagnostic value.
+
+Evidence: 
+  Hendrikse J. Radiology. 246:572 (2008)
+  MacIntosh BJ. JCBFM 28:1514 (2008) and MRM 63:641 (2010)
+  Bokkers R. JCBFM 30:222 (2010)
+  Qui M et al. MRM 63:374 (2010)
+
+*Technical details*
+
+Following parameters can be extracted: arterial transit time (ATT), time to
+peak (TTP), and full width at half maximum (FWHM). ATT is the time it takes
+magnetic bolus to reach a specific location in the brain, TTP is the time to
+reach maximum perfusion signal at the same location, and FWHM is an indicator
+of the duration of "active perfusion" (including T1 decay effects). Main focus
+should be on ATT and TTP.
+
+ASL data should be acquired at multiple phases. This can be done using either
+R2.1.3 patch from Singapore that was used for ASL test-restest study or with
+product version of ASL. The optimal number of phases is still unclear.
+Simultaneous use of vascular crushers is not required, but may be helpful in
+future.
+    
+
+*Current status*
+(as of March 18, 2010)
+
+Features implemented:
+* QUASAR data load (PAR/REC)
+* Cumulative averaging and subtraction 
+  (separate for crushed/non-crushed/lowFA cycles)
+* gammavar fitting to obtain time-to-peak from deltaMcr
+  (needs improvement over selection of good/bad (noise-wise) time-courses)
+* GUI app
+

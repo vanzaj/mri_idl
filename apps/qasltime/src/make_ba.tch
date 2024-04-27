@@ -1,0 +1,24 @@
+; IDL> @make_ba.tch
+
+.full_reset_session
+.compile avrg.pro
+.compile programrootdir.pro
+.compile hashtable__define.pro
+.compile obj_valid_isa.pro
+.compile parrec.pro
+.compile gammavar.pro
+.compile mpfitfun.pro
+.compile anzhead_struct.pro
+.compile writeanz.pro
+.compile qaslcalc__define.pro
+.compile qasltime.pro
+resolve_routine,'XManager',/COMPILE_FULL_FILE 
+resolve_all,/continue_on_error
+save, /routines, filename='qasltime.sav' 
+
+;qasltime, app=app
+
+;calc = app->get('calc') ; qaslcalc object
+;p = calc->getData('deltaMcr')
+;info = calc->get('info') ; PAR info
+;n_ph = info->get('nb_phases')

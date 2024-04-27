@@ -1,0 +1,4 @@
+tmp_dir = c:\temp
+data_dir = C:\idl_ivz\apps\qasl_spect\ex_data\p017_YM\20080218_spect_darg\
+cbf_min =   0.0
+cbf_max = 100.0
